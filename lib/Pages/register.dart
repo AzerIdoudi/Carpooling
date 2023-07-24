@@ -32,7 +32,10 @@ class register extends StatelessWidget {
               padding: const EdgeInsets.only(top: 40),
               child: const Text(
                 "Let's get started!",
-                style: TextStyle(fontSize: 40),
+                style: TextStyle(
+                    fontSize: 40,
+                    fontFamily: 'Raleway',
+                    fontWeight: FontWeight.bold),
               )),
           Container(
             padding: EdgeInsets.only(top: 5, bottom: 40),
@@ -47,6 +50,8 @@ class register extends StatelessWidget {
             child: TextField(
                 decoration: InputDecoration(
               hintText: 'Full name',
+              hintStyle:
+                  TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold),
               prefixIcon: Icon(Icons.account_box),
               prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
               enabledBorder: OutlineInputBorder(
@@ -71,6 +76,8 @@ class register extends StatelessWidget {
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Email',
+                  hintStyle: TextStyle(
+                      fontFamily: 'Raleway', fontWeight: FontWeight.bold),
                   prefixIcon: Icon(Icons.mail),
                   prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
                   enabledBorder: OutlineInputBorder(
@@ -94,6 +101,8 @@ class register extends StatelessWidget {
             child: TextField(
                 decoration: InputDecoration(
               hintText: 'Password',
+              hintStyle:
+                  TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold),
               prefixIcon: Icon(Icons.password),
               prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
               enabledBorder: OutlineInputBorder(
@@ -118,6 +127,8 @@ class register extends StatelessWidget {
             child: TextField(
                 decoration: InputDecoration(
               hintText: 'Confirm Password',
+              hintStyle:
+                  TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold),
               prefixIcon: Icon(Icons.password),
               prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
               enabledBorder: OutlineInputBorder(
@@ -142,7 +153,11 @@ class register extends StatelessWidget {
             },
             child: Text(
               'SIGN UP',
-              style: TextStyle(color: Colors.white, fontSize: 22),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontFamily: 'Raleway',
+                  fontWeight: FontWeight.bold),
             ),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.only(
@@ -152,7 +167,7 @@ class register extends StatelessWidget {
             ),
           ),
           Container(
-              padding: EdgeInsets.all(75),
+              padding: EdgeInsets.all(80),
               child: RichText(
                 text: TextSpan(
                     text: "Already have an account?",
