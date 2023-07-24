@@ -11,19 +11,15 @@ class register extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(children: [
           Container(
-            alignment: Alignment.topLeft,
+            width: 60,
             child: InkWell(
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const login()),
               ),
               child: Container(
-                padding: EdgeInsets.only(top: 50, left: 20),
-                alignment: Alignment.topLeft,
                 child: Image.network(
                   'https://icons.veryicon.com/png/o/miscellaneous/arrows/go-back-2.png',
-                  width: 40,
-                  height: 40,
                   color: Colors.blueAccent,
                 ),
               ),
@@ -154,7 +150,7 @@ class register extends StatelessWidget {
             ),
           ),
           Container(
-              padding: EdgeInsets.all(40),
+              padding: EdgeInsets.all(75),
               child: RichText(
                 text: TextSpan(
                     text: "Already have an account?",

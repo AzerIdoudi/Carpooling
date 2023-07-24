@@ -139,9 +139,10 @@ class login extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {},
                   child: Image.network(
-                    'https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png',
+                    'https://cdn.icon-icons.com/icons2/2389/PNG/512/facebook_f_logo_icon_145290.png',
                     width: 30,
                     height: 30,
+                    color: Colors.white,
                   ),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.only(
@@ -150,13 +151,13 @@ class login extends StatelessWidget {
                       right: 50,
                       left: 50,
                     ),
-                    backgroundColor: Color.fromARGB(255, 89, 162, 250),
+                    backgroundColor: Color.fromARGB(255, 35, 120, 224),
                     elevation: 3,
                   ))
             ],
           ),
           Container(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(50),
               child: RichText(
                 text: TextSpan(
                     text: "Don't have an account yet?",
