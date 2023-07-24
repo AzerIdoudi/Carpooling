@@ -11,11 +11,13 @@ class register extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(children: [
           Container(
-            width: 60,
+            padding: EdgeInsets.only(right: 320, top: 30, left: 20),
             child: InkWell(
               onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const login()),
+                MaterialPageRoute(
+                  builder: (context) => const login(),
+                ),
               ),
               child: Container(
                 child: Image.network(
