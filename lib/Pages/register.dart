@@ -1,11 +1,59 @@
+import 'dart:convert';
+
 import 'package:carpooling/Pages/login.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class register extends StatelessWidget {
+TextEditingController fullName = TextEditingController();
+TextEditingController email = TextEditingController();
+TextEditingController password = TextEditingController();
+TextEditingController confirmPassword = TextEditingController();
+String textHolder = '';
+
+class register extends StatefulWidget {
   const register({super.key});
 
   @override
+  State<register> createState() => _registerState();
+}
+
+class _registerState extends State<register> {
+  @override
+  void userSignUp() async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/auth/signup'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'fullName': fullName.text,
+        'email': email.text,
+        'password': password.text,
+      }),
+    );
+
+    if (fullName.text.isEmpty || email.text.isEmpty || password.text.isEmpty) {
+      setState(() {
+        textHolder = 'enter valid informations';
+      });
+    } else if (password.text != confirmPassword.text) {
+      setState(() {
+        textHolder = "Password Doesn't match";
+      });
+    } else {
+      if (response.statusCode == 200) {
+        print('User registered successfully');
+      } else {
+        final message = json.decode(response.body);
+        setState(() {
+          textHolder = message;
+        });
+      }
+    }
+    ;
+  }
+
   Widget build(BuildContext context) {
     return (Scaffold(
       body: SingleChildScrollView(
@@ -38,7 +86,7 @@ class register extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               )),
           Container(
-            padding: EdgeInsets.only(top: 5, bottom: 40),
+            padding: EdgeInsets.only(top: 5, bottom: 5),
             child: Text('Create a new account and enjoy your trips',
                 style: TextStyle(
                   fontSize: 14,
@@ -46,34 +94,43 @@ class register extends StatelessWidget {
                 )),
           ),
           Container(
-            padding: const EdgeInsets.all(10),
-            child: TextField(
-                decoration: InputDecoration(
-              hintText: 'Full name',
-              hintStyle:
-                  TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold),
-              prefixIcon: Icon(Icons.account_box),
-              prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1.5,
-                    color: const Color.fromARGB(
-                        255, 182, 182, 182)), //<-- SEE HERE
-                borderRadius: BorderRadius.circular(50.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50.0),
-                borderSide: BorderSide(
-                  width: 1.5,
-                  color: Color.fromARGB(255, 105, 190, 240),
-                ),
-              ),
-            )),
+            padding: EdgeInsets.only(top: 0, bottom: 5),
+            child: Text(textHolder,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: const Color.fromARGB(255, 255, 0, 0),
+                )),
           ),
           Container(
             padding: const EdgeInsets.all(10),
             child: TextField(
-                obscureText: true,
+                controller: fullName,
+                decoration: InputDecoration(
+                  hintText: 'Full name',
+                  hintStyle: TextStyle(
+                      fontFamily: 'Raleway', fontWeight: FontWeight.bold),
+                  prefixIcon: Icon(Icons.account_box),
+                  prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 1.5,
+                        color: const Color.fromARGB(
+                            255, 182, 182, 182)), //<-- SEE HERE
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                    borderSide: BorderSide(
+                      width: 1.5,
+                      color: Color.fromARGB(255, 105, 190, 240),
+                    ),
+                  ),
+                )),
+          ),
+          Container(
+            padding: const EdgeInsets.all(10),
+            child: TextField(
+                controller: email,
                 decoration: InputDecoration(
                   hintText: 'Email',
                   hintStyle: TextStyle(
@@ -99,57 +156,61 @@ class register extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             child: TextField(
+                controller: password,
+                obscureText: true,
                 decoration: InputDecoration(
-              hintText: 'Password',
-              hintStyle:
-                  TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold),
-              prefixIcon: Icon(Icons.password),
-              prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1.5,
-                    color: const Color.fromARGB(
-                        255, 182, 182, 182)), //<-- SEE HERE
-                borderRadius: BorderRadius.circular(50.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50.0),
-                borderSide: BorderSide(
-                  width: 1.5,
-                  color: Color.fromARGB(255, 105, 190, 240),
-                ),
-              ),
-            )),
+                  hintText: 'Password',
+                  hintStyle: TextStyle(
+                      fontFamily: 'Raleway', fontWeight: FontWeight.bold),
+                  prefixIcon: Icon(Icons.password),
+                  prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 1.5,
+                        color: const Color.fromARGB(
+                            255, 182, 182, 182)), //<-- SEE HERE
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                    borderSide: BorderSide(
+                      width: 1.5,
+                      color: Color.fromARGB(255, 105, 190, 240),
+                    ),
+                  ),
+                )),
           ),
           Container(
             padding:
                 const EdgeInsets.only(top: 10, bottom: 40, left: 10, right: 10),
             child: TextField(
+                controller: confirmPassword,
+                obscureText: true,
                 decoration: InputDecoration(
-              hintText: 'Confirm Password',
-              hintStyle:
-                  TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold),
-              prefixIcon: Icon(Icons.password),
-              prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1.5,
-                    color: const Color.fromARGB(
-                        255, 182, 182, 182)), //<-- SEE HERE
-                borderRadius: BorderRadius.circular(50.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50.0),
-                borderSide: BorderSide(
-                  width: 1.5,
-                  color: Color.fromARGB(255, 105, 190, 240),
-                ),
-              ),
-            )),
+                  hintText: 'Confirm Password',
+                  hintStyle: TextStyle(
+                      fontFamily: 'Raleway', fontWeight: FontWeight.bold),
+                  prefixIcon: Icon(Icons.password),
+                  prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 1.5,
+                        color: const Color.fromARGB(
+                            255, 182, 182, 182)), //<-- SEE HERE
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                    borderSide: BorderSide(
+                      width: 1.5,
+                      color: Color.fromARGB(255, 105, 190, 240),
+                    ),
+                  ),
+                )),
           ),
           ElevatedButton(
             onPressed: () {
-              // Respond to button press
+              userSignUp();
             },
             child: Text(
               'SIGN UP',
@@ -167,7 +228,7 @@ class register extends StatelessWidget {
             ),
           ),
           Container(
-              padding: EdgeInsets.all(80),
+              padding: EdgeInsets.only(top: 80),
               child: RichText(
                 text: TextSpan(
                     text: "Already have an account?",

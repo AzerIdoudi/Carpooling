@@ -4,6 +4,7 @@ const users=require('../userList');
 const bcrypt=require('bcrypt');
 const mongoose=require('mongoose');
 const JWT=require('jsonwebtoken');
+let messageQueue = [];
 
 router.post("/signup",[
     check("fullName","Please enter a valid name")
@@ -21,20 +22,25 @@ router.post("/signup",[
             {
                 errors:errors.array(),
             }
-        )
+        ),
+        messageQueue.push(errors);
     }
+
     let emailExist= await users.findOne({email:req.body.email})
     if (emailExist){
         res.status(400).json({
             "msg":"User already exist"
-        })
+        }),
+        messageQueue.push(res);
+        
     }else{
     let hashedPassword= await bcrypt.hash(password,10);
     users.create({
         fullName,
         email,
         password:hashedPassword
-    })
+    });
+    console.log('user successfuly created');
 
     
     const token=await JWT.sign({
