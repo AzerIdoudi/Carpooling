@@ -46,7 +46,6 @@ class _loginState extends State<login> {
           status = data["userStatus"];
           print(token);
         });
-
         if (token != '') {
           if (status == '') {
             Navigator.push(

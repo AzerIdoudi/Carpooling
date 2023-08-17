@@ -2,7 +2,6 @@ const router=require('express').Router();
 const users=require('../userList');
 const {check,validationResult}=require('express-validator');
 const cars=require('../carList');
-const mongoose=require('mongoose');
 
 router.post("/notDriver", async(req,res)=>{
     const {owner}=req.body;
@@ -11,7 +10,7 @@ router.post("/notDriver", async(req,res)=>{
     let user=await users.findOneAndUpdate({email:token.email},{"status":"Passenger"});
     res.status(200).send(
         user)
-})
+});
 
 
 router.post("/createCar",[
@@ -43,6 +42,6 @@ router.post("/createCar",[
     res.status(200).send(
         user)
 }
-});
+})
 
 module.exports=router;

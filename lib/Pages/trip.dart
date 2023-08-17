@@ -85,6 +85,7 @@ class tripState extends State<trip> {
                   ),
                 )),
               ),
+              SizedBox(height: 20),
               Container(
                 height: 50,
                 padding: EdgeInsets.only(left: 20, right: 20),
@@ -110,7 +111,53 @@ class tripState extends State<trip> {
                     ),
                   ),
                 )),
-              )
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Request trip',
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.only(
+                          top: 2,
+                          bottom: 2,
+                          right: 20,
+                          left: 20,
+                        ),
+                        primary: Color.fromARGB(255, 17, 168, 255),
+                        onPrimary: Colors.white,
+                        textStyle: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Raleway'),
+                        elevation: 3,
+                      )),
+                  ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Clear',
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.only(
+                          top: 2,
+                          bottom: 2,
+                          right: 50,
+                          left: 50,
+                        ),
+                        primary: Color.fromARGB(255, 255, 165, 92),
+                        onPrimary: Colors.white,
+                        textStyle: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Raleway'),
+                        elevation: 3,
+                      ))
+                ],
+              ),
             ]),
           ),
         ]),
