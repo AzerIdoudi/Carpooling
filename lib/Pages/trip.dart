@@ -69,8 +69,8 @@ class tripState extends State<trip> {
                   hintText: 'Where to?',
                   hintStyle: TextStyle(
                       fontFamily: 'Raleway', fontWeight: FontWeight.bold),
-                  prefixIcon: Icon(Icons.account_circle),
-                  prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
+                  prefixIcon: Icon(Icons.location_on_outlined),
+                  prefixIconColor: Color.fromARGB(255, 255, 255, 255),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         width: 1.5, color: Color.fromARGB(255, 255, 255, 255)),
@@ -94,8 +94,8 @@ class tripState extends State<trip> {
                   hintText: "Driver's email adress",
                   hintStyle: TextStyle(
                       fontFamily: 'Raleway', fontWeight: FontWeight.bold),
-                  prefixIcon: Icon(Icons.account_circle),
-                  prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
+                  prefixIcon: Icon(Icons.mail),
+                  prefixIconColor: Color.fromARGB(255, 255, 255, 255),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         width: 1.5,
