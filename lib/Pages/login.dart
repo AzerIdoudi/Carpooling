@@ -1,11 +1,86 @@
+import 'package:carpooling/Pages/homePage.dart';
 import 'package:carpooling/Pages/register.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class login extends StatelessWidget {
+import 'createCar.dart';
+
+TextEditingController email = TextEditingController();
+TextEditingController password = TextEditingController();
+String textHolder = '';
+String token = '';
+String status = '';
+
+class login extends StatefulWidget {
   const login({super.key});
 
   @override
+  State<login> createState() => _loginState();
+}
+
+class _loginState extends State<login> {
+  @override
+  void userSignIn() async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/auth/login'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email.text,
+        'password': password.text,
+      }),
+    );
+
+    if (email.text.isEmpty || password.text.isEmpty) {
+      setState(() {
+        textHolder = 'enter valid informations';
+      });
+    } else {
+      if (response.statusCode == 200) {
+        setState(() {
+          final data = json.decode(response.body);
+          token = data["token"];
+          status = data["userStatus"];
+          print(token);
+        });
+
+        if (token != '') {
+          if (status == '') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => createCar(),
+              ),
+            );
+          } else if (status == 'Passenger') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => homePage(),
+              ),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => homePage(),
+              ),
+            );
+          }
+        }
+      } else {
+        String error = response.body;
+        setState(() {
+          textHolder = error;
+        });
+      }
+    }
+    ;
+  }
+
   Widget build(BuildContext context) {
     return (Scaffold(
       body: SingleChildScrollView(
@@ -35,33 +110,42 @@ class login extends StatelessWidget {
                 )),
           ),
           Container(
-            padding: const EdgeInsets.all(10),
-            child: TextField(
-                decoration: InputDecoration(
-              hintText: 'Email adress',
-              hintStyle:
-                  TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.bold),
-              prefixIcon: Icon(Icons.account_circle),
-              prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1.5,
-                    color: const Color.fromARGB(
-                        255, 182, 182, 182)), //<-- SEE HERE
-                borderRadius: BorderRadius.circular(50.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50.0),
-                borderSide: BorderSide(
-                  width: 1.5,
-                  color: Color.fromARGB(255, 105, 190, 240),
-                ),
-              ),
-            )),
+            padding: EdgeInsets.only(top: 0, bottom: 5),
+            child: Text(textHolder,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: const Color.fromARGB(255, 255, 0, 0),
+                )),
           ),
           Container(
             padding: const EdgeInsets.all(10),
             child: TextField(
+                controller: email,
+                decoration: InputDecoration(
+                  hintText: 'Email adress',
+                  hintStyle: TextStyle(
+                      fontFamily: 'Raleway', fontWeight: FontWeight.bold),
+                  prefixIcon: Icon(Icons.account_circle),
+                  prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 1.5,
+                        color: const Color.fromARGB(255, 182, 182, 182)),
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                    borderSide: BorderSide(
+                      width: 1.5,
+                      color: Color.fromARGB(255, 105, 190, 240),
+                    ),
+                  ),
+                )),
+          ),
+          Container(
+            padding: const EdgeInsets.all(10),
+            child: TextField(
+                controller: password,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Password',
@@ -92,7 +176,7 @@ class login extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              // Respond to button press
+              userSignIn();
             },
             child: Text(
               'SIGN IN',
@@ -121,8 +205,8 @@ class login extends StatelessWidget {
             children: [
               ElevatedButton(
                   onPressed: () {},
-                  child: Image.network(
-                    'https://www.seekpng.com/png/full/201-2014535_google-icon-logo-black-and-white-french-flag.png',
+                  child: Image.asset(
+                    'assets/images/google.png',
                     width: 30,
                     height: 30,
                   ),
@@ -138,8 +222,8 @@ class login extends StatelessWidget {
                   )),
               ElevatedButton(
                   onPressed: () {},
-                  child: Image.network(
-                    'https://cdn.icon-icons.com/icons2/2389/PNG/512/facebook_f_logo_icon_145290.png',
+                  child: Image.asset(
+                    'assets/images/facebook.png',
                     width: 30,
                     height: 30,
                     color: Colors.white,
@@ -157,7 +241,7 @@ class login extends StatelessWidget {
             ],
           ),
           Container(
-              padding: EdgeInsets.all(50),
+              padding: EdgeInsets.all(20),
               child: RichText(
                 text: TextSpan(
                     text: "Don't have an account yet?",

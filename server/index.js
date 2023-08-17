@@ -1,9 +1,11 @@
 const express = require('express');
 const auth=require('./routes/auth');
+const carMan=require('./routes/carMan');
+const home=require('./routes/home');
 const mongoose=require('mongoose');
 const bodyParser = require('body-parser');
 mongoose.connect(
-    'mongodb+srv://coadmin:PuAxQEkfvLz3Npk7@cluster0.9mskojx.mongodb.net/',{ useNewUrlParser: true,useUnifiedTopology: true },
+    'mongodb+srv://coadmin:PuAxQEkfvLz3Npk7@cluster0.9mskojx.mongodb.net/',{ useNewUrlParser: true,useUnifiedTopology: true ,useFindAndModify: false },
     (err) => {
      if(err) console.log(err) 
      else console.log("mongdb is connected");
@@ -12,10 +14,13 @@ mongoose.connect(
 app=express();
 app.use(express.json());
 app.use('/auth',auth);
+app.use('/carMan',carMan);
+app.use('/home',home);
 app.get('/',(req,res)=>{
     res.send('TEST');
 });
 app.listen(3000,()=>{
     console.log('Server is online');
 });
+
 app.use(bodyParser.json());

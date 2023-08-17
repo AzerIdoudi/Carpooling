@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 TextEditingController fullName = TextEditingController();
 TextEditingController email = TextEditingController();
+TextEditingController city = TextEditingController();
 TextEditingController password = TextEditingController();
 TextEditingController confirmPassword = TextEditingController();
 String textHolder = '';
@@ -29,11 +30,15 @@ class _registerState extends State<register> {
       body: jsonEncode(<String, String>{
         'fullName': fullName.text,
         'email': email.text,
+        'city': city.text,
         'password': password.text,
       }),
     );
 
-    if (fullName.text.isEmpty || email.text.isEmpty || password.text.isEmpty) {
+    if (fullName.text.isEmpty ||
+        email.text.isEmpty ||
+        password.text.isEmpty ||
+        city.text.isEmpty) {
       setState(() {
         textHolder = 'enter valid informations';
       });
@@ -43,11 +48,16 @@ class _registerState extends State<register> {
       });
     } else {
       if (response.statusCode == 200) {
-        print('User registered successfully');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => login(),
+          ),
+        );
       } else {
-        final message = json.decode(response.body);
+        String error = response.body;
         setState(() {
-          textHolder = message;
+          textHolder = error;
         });
       }
     }
@@ -77,7 +87,7 @@ class _registerState extends State<register> {
           ),
           Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.only(top: 40),
+              padding: const EdgeInsets.only(top: 10),
               child: const Text(
                 "Let's get started!",
                 style: TextStyle(
@@ -136,6 +146,32 @@ class _registerState extends State<register> {
                   hintStyle: TextStyle(
                       fontFamily: 'Raleway', fontWeight: FontWeight.bold),
                   prefixIcon: Icon(Icons.mail),
+                  prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 1.5,
+                        color:
+                            Color.fromARGB(255, 182, 182, 182)), //<-- SEE HERE
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                    borderSide: BorderSide(
+                      width: 1.5,
+                      color: Color.fromARGB(255, 105, 190, 240),
+                    ),
+                  ),
+                )),
+          ),
+          Container(
+            padding: const EdgeInsets.all(10),
+            child: TextField(
+                controller: city,
+                decoration: InputDecoration(
+                  hintText: 'City',
+                  hintStyle: TextStyle(
+                      fontFamily: 'Raleway', fontWeight: FontWeight.bold),
+                  prefixIcon: Icon(Icons.location_city),
                   prefixIconColor: const Color.fromARGB(255, 105, 190, 240),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
@@ -228,7 +264,7 @@ class _registerState extends State<register> {
             ),
           ),
           Container(
-              padding: EdgeInsets.only(top: 80),
+              padding: EdgeInsets.only(top: 20),
               child: RichText(
                 text: TextSpan(
                     text: "Already have an account?",
