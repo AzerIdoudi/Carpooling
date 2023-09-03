@@ -5,6 +5,9 @@ import 'package:carpooling/Pages/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:carpooling/Pages/pTrips.dart';
 
+import 'carList.dart';
+import 'dtrips.dart';
+
 class profile extends StatefulWidget {
   const profile({super.key});
 
@@ -662,12 +665,22 @@ class _profileState extends State<profile> {
                       borderRadius: BorderRadius.circular(10)),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => pTrips(),
-                    ),
-                  );
+                  if (status == 'Passenger') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => pTrips(),
+                      ),
+                    );
+                  }
+                  if (status == 'Driver') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => dtrips(),
+                      ),
+                    );
+                  }
                 },
                 child: Row(children: [
                   Icon(
@@ -708,6 +721,7 @@ class _profileState extends State<profile> {
                     userCity = '';
                     userEmail = '';
                     userID = '';
+                    carlen = 0;
                   });
                   Navigator.push(
                     context,

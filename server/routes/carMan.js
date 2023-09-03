@@ -9,7 +9,12 @@ router.post("/notDriver", async(req,res)=>{
     res.status(200).send(
         user)
 });
-
+router.post("/deleteCar", async(req,res)=>{
+    const {carID}=req.body;
+    let car=await cars.findOneAndDelete({carID:carID});
+    res.status(200).send(
+        console.log(carID))
+});
 router.post("/createCar",[
     check("mark","Please enter a valid car Mark")
         .isLength({min:3}),

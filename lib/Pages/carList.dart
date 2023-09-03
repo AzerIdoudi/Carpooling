@@ -10,6 +10,9 @@ class carList extends StatefulWidget {
   State<carList> createState() => _carListState();
 }
 
+String carid = '';
+int carlen = 0;
+
 class Car {
   final String carID;
   final String mark;
@@ -40,6 +43,7 @@ class _carListState extends State<carList> {
   List<Car> Cars = [];
   Future getCars() async {
     Cars.clear();
+    carlen = 0;
     final url = Uri.parse('http://10.0.2.2:3000/home/carList');
     final response = await http.get(url);
     final jsonData = await jsonDecode(response.body);
@@ -53,6 +57,27 @@ class _carListState extends State<carList> {
     }
   }
 
+  void deleteCar() async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/carMan/deleteCar'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'carID': carid,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Car Deleted'),
+        backgroundColor: Colors.greenAccent,
+      ));
+      getCars();
+      print(carlen);
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -63,6 +88,7 @@ class _carListState extends State<carList> {
               itemCount: Cars.length,
               itemBuilder: (context, index) {
                 if (Cars[index].owner == userEmail) {
+                  carlen = carlen + 1;
                   return Card(
                     color: Color.fromARGB(255, 158, 212, 255),
                     shape: RoundedRectangleBorder(
@@ -111,7 +137,20 @@ class _carListState extends State<carList> {
                               Column(
                                 children: [
                                   ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        carid = Cars[index].carID;
+                                        if (carlen == 1) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text(
+                                                'You must have at least one car'),
+                                            backgroundColor: Color.fromARGB(
+                                                255, 255, 89, 89),
+                                          ));
+                                        } else {
+                                          deleteCar();
+                                        }
+                                      },
                                       child: Icon(Icons.delete,
                                           color: Color.fromARGB(
                                               255, 255, 75, 75))),
