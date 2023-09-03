@@ -24,9 +24,9 @@ class _createCarState extends State<createCar> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{'owner': token}),
+      body: jsonEncode(<String, String>{'owner': userEmail}),
     );
-    print(token);
+    print(userEmail);
     if (response.statusCode == 200) {
       Navigator.push(
         context,
@@ -49,7 +49,7 @@ class _createCarState extends State<createCar> {
         'mark': Mark.text,
         'model': Model.text,
         'condition': Condition.text,
-        'owner': token
+        'owner': userEmail
       }),
     );
 
@@ -168,7 +168,6 @@ class _createCarState extends State<createCar> {
                 const EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 40),
             child: TextField(
                 controller: Condition,
-                obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Condition',
                   hintStyle: TextStyle(

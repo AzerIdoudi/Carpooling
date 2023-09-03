@@ -1,7 +1,10 @@
 const mongoose=require('mongoose');
 
 const usersSchema= mongoose.Schema({
-    mark:{
+  carID:{
+    type:String,
+  }, 
+  mark:{
     type:String,
   },  
   model:{

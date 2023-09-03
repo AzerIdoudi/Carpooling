@@ -5,25 +5,21 @@ const cars=require('../carList');
 
 router.post("/notDriver", async(req,res)=>{
     const {owner}=req.body;
-    const token=JSON.parse(Buffer.from(owner.split('.')[1], 'base64').toString());
-
-    let user=await users.findOneAndUpdate({email:token.email},{"status":"Passenger"});
+    let user=await users.findOneAndUpdate({email:owner},{"status":"Passenger"});
     res.status(200).send(
         user)
 });
 
-
 router.post("/createCar",[
     check("mark","Please enter a valid car Mark")
-        .isLength({min:6}),
+        .isLength({min:3}),
     check("model","Please provide a valid car Model")
-        .isLength({min:6}),
+        .isLength({min:3}),
     check("condition","please enter a valid Condition")
         .isLength({min:3})
     ]
 ,async (req,res)=>{
     const {mark,model,condition,owner}=req.body;
-    const token=JSON.parse(Buffer.from(owner.split('.')[1], 'base64').toString());
     const errors=validationResult(req);
     if (!errors.isEmpty()){
 
@@ -33,12 +29,13 @@ router.post("/createCar",[
     }
     else{
     cars.create({
+        carID:Date.now().toString(),
         mark,
         model,
         condition,
-        owner:token.email
+        owner:owner
     });
-    let user=await users.findOneAndUpdate({email:token.email},{'status':'Driver'});
+    let user=await users.findOneAndUpdate({email:owner},{'status':'Driver'});
     res.status(200).send(
         user)
 }

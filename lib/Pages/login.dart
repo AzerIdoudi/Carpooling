@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:carpooling/Pages/homePage.dart';
 import 'package:carpooling/Pages/register.dart';
 import 'package:flutter/gestures.dart';
@@ -6,12 +8,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'createCar.dart';
+import 'driverHome.dart';
 
 TextEditingController email = TextEditingController();
 TextEditingController password = TextEditingController();
 String textHolder = '';
 String token = '';
 String status = '';
+String userName = '';
+String userCity = '';
+String userEmail = '';
+String userID = '';
 
 class login extends StatefulWidget {
   const login({super.key});
@@ -43,8 +50,11 @@ class _loginState extends State<login> {
         setState(() {
           final data = json.decode(response.body);
           token = data["token"];
+          userEmail = data["email"];
           status = data["userStatus"];
-          print(token);
+          userName = data["userName"];
+          userCity = data["userCity"];
+          userID = data["userID"];
         });
         if (token != '') {
           if (status == '') {
@@ -62,12 +72,21 @@ class _loginState extends State<login> {
               ),
             );
           } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => homePage(),
-              ),
-            );
+            if (status == 'Passenger') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => homePage(),
+                ),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => driverHome(),
+                ),
+              );
+            }
           }
         }
       } else {

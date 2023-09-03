@@ -27,7 +27,7 @@ class _homePageState extends State<homePage> {
           child: Container(
             margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 114, 191, 255),
+              color: Color.fromARGB(255, 0, 140, 255),
               borderRadius: BorderRadius.circular(50),
             ),
             child: GNav(
@@ -51,6 +51,7 @@ class _homePageState extends State<homePage> {
                       color: Color.fromARGB(255, 25, 152, 255)),
                   icon: Icons.list_alt_outlined,
                   text: 'Drivers List',
+                  onPressed: () {},
                 ),
                 GButton(
                   textStyle: TextStyle(
@@ -58,10 +59,8 @@ class _homePageState extends State<homePage> {
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 25, 152, 255)),
                   icon: Icons.location_on_outlined,
-                  text: 'Active trip',
-                  onPressed: () {
-                    refresh();
-                  },
+                  text: 'Request trip',
+                  onPressed: () {},
                 ),
                 GButton(
                     textStyle: TextStyle(

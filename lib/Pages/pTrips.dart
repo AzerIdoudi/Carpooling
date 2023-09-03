@@ -1,0 +1,159 @@
+import 'package:carpooling/Pages/login.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class pTrips extends StatefulWidget {
+  const pTrips({super.key});
+
+  @override
+  State<pTrips> createState() => _pTripsState();
+}
+
+class Trip {
+  final String destination;
+  final String driver;
+  final String car;
+  final String dateTime;
+  final String passenger;
+  final String status;
+
+  Trip(
+      {required this.destination,
+      required this.driver,
+      required this.car,
+      required this.dateTime,
+      required this.passenger,
+      required this.status});
+
+  factory Trip.fromJson(Map<String, dynamic> json) {
+    return Trip(
+      destination: json['destination'],
+      driver: json['driver'],
+      car: json['car'],
+      dateTime: json['dateTime'],
+      passenger: json['passenger'],
+      status: json['status'],
+    );
+  }
+}
+
+class _pTripsState extends State<pTrips> {
+  @override
+  List<Trip> Trips = [];
+  Future getTrips() async {
+    Trips.clear();
+    final url = Uri.parse('http://10.0.2.2:3000/trip/ptrip');
+    final response = await http.get(url);
+    final jsonData = await jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      for (var item in jsonData) {
+        setState(() {
+          Trip trip = Trip.fromJson(item);
+          Trips.add(trip);
+        });
+      }
+    }
+  }
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Trip List'),
+        shadowColor: Theme.of(context).colorScheme.shadow,
+      ),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      body: RefreshIndicator(
+          onRefresh: getTrips,
+          child: ListView.builder(
+            padding: EdgeInsets.only(top: 50, bottom: 85),
+            itemCount: Trips.length,
+            itemBuilder: (context, index) {
+              if (Trips[index].passenger == userEmail) {
+                return Card(
+                  color: Color.fromARGB(255, 158, 212, 255),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Image.asset(
+                              ("assets/images/Vector-Trip-PNG.png"),
+                              height: 150,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            ),
+                            Container(width: 20),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(height: 5),
+                                  Text(
+                                    Trips[index].destination,
+                                    style: TextStyle(
+                                        fontFamily: 'Raleway',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.white),
+                                  ),
+                                  Container(height: 5),
+                                  Text(
+                                    Trips[index].driver,
+                                    style: TextStyle(
+                                        fontFamily: 'Raleway',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(height: 5),
+                                  Text(Trips[index].car),
+                                  Container(height: 5),
+                                  Text(
+                                    Trips[index].dateTime,
+                                    style: TextStyle(
+                                      fontFamily: 'Raleway',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Container(height: 5),
+                                  Text(
+                                    Trips[index].status,
+                                    style: TextStyle(
+                                        fontFamily: 'Raleway',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              children: [
+                                ElevatedButton(
+                                    onPressed: () {},
+                                    child: Icon(Icons.delete,
+                                        color:
+                                            Color.fromARGB(255, 255, 64, 64))),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          )),
+    );
+  }
+
+  void initState() {
+    super.initState();
+    getTrips();
+  }
+}

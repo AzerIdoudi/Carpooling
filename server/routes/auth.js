@@ -31,6 +31,7 @@ router.post("/signup",[
     }else{
     let hashedPassword= await bcrypt.hash(password,10);
     users.create({
+        userID:Date.now().toString(),
         fullName,
         email,
         city,
@@ -47,6 +48,7 @@ router.post('/login',async(req,res)=>{
     const {email,password}=req.body;
     let emailExist= await users.findOne({email:req.body.email});
 
+
     if (!emailExist){
         res.status(400).send('Invalid email')}
     else {
@@ -59,10 +61,17 @@ router.post('/login',async(req,res)=>{
             const token=await JWT.sign({
         email},'dwd54gfd9f65g4sdfhgw9r564ghts',{expiresIn:"1h"} 
     )
+    userName=emailExist.fullName;
+    userCity=emailExist.city;
     let userStatus=emailExist.status
+    let userID=emailExist.userID
         res.json({
             token,
-            userStatus
+            userStatus,
+            userName,
+            userCity,
+            email,
+            userID
         })
 
 console.log('Logged in');
