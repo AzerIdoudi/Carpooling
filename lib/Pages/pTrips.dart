@@ -10,6 +10,9 @@ class pTrips extends StatefulWidget {
   State<pTrips> createState() => _pTripsState();
 }
 
+String selectedTripDate = "";
+String selectedTripDestination = "";
+
 class Trip {
   final String destination;
   final String driver;
@@ -54,6 +57,19 @@ class _pTripsState extends State<pTrips> {
         });
       }
     }
+  }
+
+  void deleteTrip() async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/trip/deleteTrip'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'selDest': selectedTripDestination,
+        'selDate': selectedTripDate
+      }),
+    );
   }
 
   Widget build(BuildContext context) {
@@ -134,7 +150,19 @@ class _pTripsState extends State<pTrips> {
                             Column(
                               children: [
                                 ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      selectedTripDate = Trips[index].dateTime;
+                                      selectedTripDestination =
+                                          Trips[index].destination;
+                                      deleteTrip();
+                                      getTrips();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text('Trip Deleted'),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 255, 89, 89),
+                                      ));
+                                    },
                                     child: Icon(Icons.delete,
                                         color:
                                             Color.fromARGB(255, 255, 64, 64))),

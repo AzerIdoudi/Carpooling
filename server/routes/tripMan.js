@@ -47,5 +47,16 @@ router.get('/ptrip',async (req,res)=>{
         trips
     )
 });
-
+router.post("/deleteTrip", async(req,res)=>{
+    const {selDest,selDate}=req.body;
+    let trips=await trip.findOneAndDelete({destination:selDest,dateTime:selDate});
+    res.status(200).send(
+        console.log(selDate,selDest))
+});
+router.post("/acceptTrip", async(req,res)=>{
+    const {selDest,selDate}=req.body;
+    let trips=await trip.findOneAndUpdate({destination:selDest,dateTime:selDate},{status:"Accepted"});
+    res.status(200).send(
+        console.log(selDate,selDest))
+});
 module.exports=router;

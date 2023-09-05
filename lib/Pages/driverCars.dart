@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'addCar.dart';
+import 'driversList.dart';
 
-class carList extends StatefulWidget {
-  const carList({super.key});
+class driverCars extends StatefulWidget {
+  const driverCars({super.key});
 
   @override
-  State<carList> createState() => _carListState();
+  State<driverCars> createState() => _driverCarsState();
 }
 
-String carid = '';
 int carlen = 0;
 
 class Car {
@@ -40,7 +39,7 @@ class Car {
   }
 }
 
-class _carListState extends State<carList> {
+class _driverCarsState extends State<driverCars> {
   @override
   List<Car> Cars = [];
   Future getCars() async {
@@ -59,50 +58,19 @@ class _carListState extends State<carList> {
     }
   }
 
-  void deleteCar() async {
-    final response = await http.post(
-      Uri.parse('http://10.0.2.2:3000/carMan/deleteCar'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'carID': carid,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Car Deleted'),
-        backgroundColor: Colors.greenAccent,
-      ));
-      getCars();
-      print(carlen);
-    }
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => addCar(),
-                ),
-              );
-            },
-            icon: Icon(Icons.add),
-          ),
-        ),
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        appBar: AppBar(
+          title: Text("${driveremail}'s Cars List"),
+        ),
         body: RefreshIndicator(
             onRefresh: getCars,
             child: ListView.builder(
               padding: EdgeInsets.only(top: 50, bottom: 85),
               itemCount: Cars.length,
               itemBuilder: (context, index) {
-                if (Cars[index].owner == userEmail) {
+                if (Cars[index].owner == driveremail) {
                   carlen = carlen + 1;
                   return Card(
                     color: Color.fromARGB(255, 158, 212, 255),
@@ -150,29 +118,7 @@ class _carListState extends State<carList> {
                                 ),
                               ),
                               Column(
-                                children: [
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        carid = Cars[index].carID;
-                                        if (carlen == 1) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text(
-                                                'You must have at least one car'),
-                                            backgroundColor: Color.fromARGB(
-                                                255, 255, 89, 89),
-                                          ));
-                                        } else {
-                                          deleteCar();
-                                        }
-                                      },
-                                      child: Icon(Icons.delete,
-                                          color: Color.fromARGB(
-                                              255, 255, 75, 75))),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
+                                children: [],
                               ),
                             ],
                           ),

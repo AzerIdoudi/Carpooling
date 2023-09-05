@@ -10,6 +10,9 @@ class dtrips extends StatefulWidget {
   State<dtrips> createState() => _dtripsState();
 }
 
+String selectedTripDate = "";
+String selectedTripDestination = "";
+
 class Trip {
   final String destination;
   final String driver;
@@ -54,6 +57,32 @@ class _dtripsState extends State<dtrips> {
         });
       }
     }
+  }
+
+  void deleteTrip() async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/trip/deleteTrip'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'selDest': selectedTripDestination,
+        'selDate': selectedTripDate
+      }),
+    );
+  }
+
+  void acceptTrip() async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/trip/acceptTrip'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'selDest': selectedTripDestination,
+        'selDate': selectedTripDate
+      }),
+    );
   }
 
   Widget build(BuildContext context) {
@@ -134,12 +163,36 @@ class _dtripsState extends State<dtrips> {
                             Column(
                               children: [
                                 ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      selectedTripDate = Trips[index].dateTime;
+                                      selectedTripDestination =
+                                          Trips[index].destination;
+                                      deleteTrip();
+                                      getTrips();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text('Trip Deleted'),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 255, 89, 89),
+                                      ));
+                                    },
                                     child: Icon(Icons.delete,
                                         color:
                                             Color.fromARGB(255, 255, 64, 64))),
                                 ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      selectedTripDate = Trips[index].dateTime;
+                                      selectedTripDestination =
+                                          Trips[index].destination;
+                                      acceptTrip();
+                                      getTrips();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text('Trip Accepted'),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 33, 201, 0),
+                                      ));
+                                    },
                                     child: Icon(Icons.done,
                                         color:
                                             Color.fromARGB(255, 33, 201, 0))),
