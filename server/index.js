@@ -23,7 +23,7 @@ app.use('/profile',profile);
 app.get('/',(req,res)=>{
     res.send('TEST');
 });
-app.listen(3030,()=>{
+app.listen(3000,()=>{
     console.log('Server is online');
 });
 
