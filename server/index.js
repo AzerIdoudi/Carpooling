@@ -7,7 +7,7 @@ const profile=require('./routes/profileMan');
 const mongoose=require('mongoose');
 const bodyParser = require('body-parser');
 mongoose.connect(
-    'mongodb+srv://coadmin:PuAxQEkfvLz3Npk7@cluster0.9mskojx.mongodb.net/',{ useNewUrlParser: true,useUnifiedTopology: true ,useFindAndModify: false },
+    '**/',{ useNewUrlParser: true,useUnifiedTopology: true ,useFindAndModify: false },
     (err) => {
      if(err) console.log(err) 
      else console.log("mongdb is connected");
